@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Search</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h2>Employee Search</h2>
+    <div class="input-group">
+        <input type="text" id="employeeName" placeholder="Enter Employee Name">
+        <button onclick="searchEmployee()">Search</button>
+    </div>
+    <div id="searchResult"></div>
+</div>
+
+<script>
+function searchEmployee() {
+    var employeeName = document.getElementById("employeeName").value;
+    $.ajax({
+        url: '/search/',
+        type: 'GET',
+        data: {
+            'employee_name': employeeName
+        },
+        success: function(data) {
+            var table = "<table><tr><th>Name</th><th>Position</th><th>Department</th></tr>";
+            data.employees.forEach(function(employee) {
+                table += "<tr><td>" + employee.name + "</td><td>" + employee.position + "</td><td>" + employee.department + "</td></tr>";
+            });
+            table += "</table>";
+            document.getElementById("dataframe").innerHTML = table;
+        },
+        error: function() {
+            document.getElementById("searchResult").innerHTML = "Error fetching data";
+        }
+    });
+}
+</script>
+{{dataframe|safe}}
+</body>
+</html>
